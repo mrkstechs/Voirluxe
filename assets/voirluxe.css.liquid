@@ -1,0 +1,261 @@
+@font-face{
+    font-family: 'Nexa';
+    font-weight: 500;
+    src: url('{{ 'NexaLight.woff2' | asset_url }}');
+}
+@font-face{
+    font-family: 'Nexa';
+    font-weight: bold;
+    src: url('{{ 'NexaBold.woff2' | asset_url }}');
+}
+.mastheader{
+    display: grid;
+    grid-template-columns: 20% auto 20%;
+    padding: 1.5em 0;
+}
+.mastheader .menu-btn,
+.mastheader .site-logo,
+.mastheader .cart,
+#footer .menu-item h4,
+.homepage-nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.site-logo a{
+    display: block;
+    width: 100%;
+}
+.site-logo img{
+    display: block;
+    margin: 0 auto;
+    width: 60%;
+}
+.mastheader .cart{
+    list-style-type: none;
+}
+.mastheader .cart .currency-picker{
+    margin: 0;
+}
+#shopify-section-mobile-navigation .cust {
+    margin-left: 1.1em;
+}
+#shopify-section-mobile-navigation .cust i.fa{
+    font-size: 1.5em;
+}
+#shopify-section-mobile-navigation .nav_items {
+    padding: 2em 0 .5em 1em;
+}
+#shopify-section-mobile-navigation .nav_items li a{
+    font-family: 'Nexa';
+    font-weight: 500;
+    text-transform: uppercase;
+}
+#shopify-section-mobile-navigation .nav_items li a:hover{
+    font-family: 'Nexa';
+    font-weight: 900;
+    text-transform: uppercase;
+}
+#CartDrawer h3{
+    font-family: 'Nexa';
+    font-weight: 900;
+    text-transform: uppercase;
+}
+#CartDrawer span.drawer__close{
+    font-family: 'Nexa';
+    font-weight: 500;
+}
+#CartDrawer .ajaxcart p,
+#CartDrawer .ajaxcart button{
+    font-family: 'Nexa' !important;
+}
+#footer{
+    display: block;
+}
+#footer .menu-item ul{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
+    margin-bottom: 0;
+    overflow: hidden;
+    transition: all 0.7s ease;
+}
+#footer .menu-item ul li a{
+    font-family: 'Nexa';
+}
+#footer .menu-item.show-menu ul{
+    height: auto;
+    opacity: 1;
+}
+#footer .footer-block-container{
+    display: flex;
+    flex-direction: column;
+}
+ul#footer-icons{
+    margin-top: 0;
+    padding-top: 0;
+}
+.homepage-content{
+    display: flex;
+    flex-direction: column;
+    height: 30vh;
+    min-height: 30vh;
+}
+.homepage-nav{
+    justify-content: center;
+    list-style-type: none;
+    margin-top: 1.35em;
+}
+.homepage-nav li a{
+    display: block;
+    padding: .5em .5em .25em .5em;
+    margin: 0 .5em;
+    font-size: 1.35em;
+    font-family: 'Nexa';
+    font-weight: 900;
+    border-bottom: .3em solid rgba(0,0,0,0);
+    transition: all .3s ease-in;
+    text-transform: uppercase;
+}
+.homepage-nav li a:hover{
+    border-bottom: .3em solid #000000;
+    font-family: 'Nexa';
+    font-weight: 500;
+}
+.homepage-content p{
+    text-align: center;
+    margin: auto auto 3em auto;
+    font-size: 1.3em;
+    font-family: 'Nexa';
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 79%;
+}
+@media only screen and (min-width: 540px){
+    .site-logo img{
+        width: 50%;
+    }
+}
+@media only screen and (min-width: 670px){
+    .mastheader{
+        padding: 2.3em 0;
+    }
+    .mastheader .menu-btn svg{
+        display: block;
+        width: 1.7em;
+        height: 1.7em;
+    }
+    .site-logo img{
+        width: 50%;
+    }
+    .mastheader .cart li a{
+        font-size: 1.15em;
+    }
+    #footer{
+        width: 100%;
+    }
+    #footer .footer-block-container{
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: row;
+    }
+    #footer .menu-item ul{
+        flex-direction: row;
+    }
+    #footer .menu-item ul li{
+        margin: 0 .5em;
+    }
+    #footer ul#footer-icons{
+        width: initial;
+    }
+}
+@media only screen and (min-width: 671px){
+    .site-logo img{
+        width: 30%;
+    }
+}
+@media only screen and (min-width: 980px){
+    .site-logo img{
+        width: 20%;
+    }
+    .index ul#soc
+}
+@media only screen and (min-width: 1221px){
+    .cart-words{
+        display: none;
+    }
+}
+@media only screen and (min-width: 1603px){
+    .site-logo img{
+        width: 16%;
+    }
+}
+/* Shop Page */
+#content{
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+div#product-loop{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 50% 50%;
+}
+div#product-loop .product{
+    margin: 0;
+}
+div#product-loop .product .icn{
+    display: block !important;
+    top: 0;
+    right: 0;
+    border-radius: 0;
+}
+div#product-loop .prod a{
+    display: block;
+    position: relative;
+}
+div#product-loop .prod a img{
+    display: block;
+    width: 100%;
+}
+div#product-loop .prod a .curtain{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: rgba(255,255,255, 0.75);
+    box-shadow: inset 0px 0px 3px 0px #000;
+    transition: all 0.7s ease;
+}
+div#product-loop .prod a:hover .curtain{
+    opacity: 1;
+}
+.prod .product-details{
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 1s ease;
+}
+.prod .product-details.animate-desc{
+    transform: translateY(0px);
+    opacity: 1;
+}
+.prod .product-details h3,
+.prod .product-details span{
+    font-family: 'Nexa';
+    text-transform: uppercase;
+}
+@media only screen and (min-width: 600px){
+    div#product-loop{
+        grid-template-columns: 33.33% 33.33% 33.33%;
+    }
+}
+@media only screen and (min-width: 768px){
+    div#product-loop{
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+}

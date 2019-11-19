@@ -1,0 +1,46 @@
+<div data-section-id="{{ section.id }}" data-section-type="collection-section">
+{% assign number = section.settings.products_per_page %}
+{% paginate collection.products by number %}
+  <div id="product-loop">
+    {% for product in collection.products %}
+    <div class="product" id="prod-{{ product.id }}" data-alpha="{{ product.title }}" data-price="{{ product.price }}">
+      {% include 'shop-listing' %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="clear"></div>
+  {% include 'pagination' %}
+{% endpaginate %}
+</div>
+
+{% schema %}
+  {
+    "name": "Shop page",
+    "settings": [
+		{
+          "type": "range",
+          "id": "products_per_row",
+          "min": 2,
+          "max": 4,
+          "step": 1,
+          "label": "Products per row",
+          "default":4
+        },
+        {
+          "type": "range",
+          "id": "products_per_page",
+          "min": 12,
+          "max": 48,
+          "step": 1,
+          "label": "Products per page",
+          "default":30
+        }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

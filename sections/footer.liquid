@@ -1,276 +1,282 @@
-<footer class="site-footer" role="contentinfo" data-section-id="{{ section.id }}" data-section-type="footer-section">
-
-  <div class="grid">
-
-    {% case section.blocks.size %}
-      {% when 0 %}
-      {% when 1 %}
-        {% assign column_width = 'text-left' %}
-      {% when 2 %}
-        {% assign column_width = 'medium-up--one-half small--one-whole' %}
-      {% when 3 %}
-        {% assign column_width = 'medium-up--one-third small--one-whole' %}
-      {% when 4 %}
-        {% assign column_width = 'medium-up--one-quarter small--one-whole' %}
-    {% endcase %}
-
-    {% for block in section.blocks %}
-      {% case block.type %}
+<footer data-section-id="{{ section.id }}">
+  <div id="footer-wrapper">
+    <div id="footer" class="row no-fouc">
+      <div class="footer-block-container">
+        <ul id="footer-icons" class="desktop-12 tablet-6 mobile-3">
+          {% if settings.facebook_url != blank %}
+            <li>
+              <a href="{{ settings.facebook_url }}" target="_blank">
+                <i class="fa fa-facebook fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.instagram-id != blank %}
+            <li>
+              <a href="//instagram.com/{{ settings.instagram-id }}" target="_blank">
+                <i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.twittername != blank %}
+            <li>
+              <a href="{{ settings.twittername }}" target="_blank">
+                <i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.pinterest_url != blank %}
+            <li>
+              <a href="{{ settings.pinterest_url }}" target="_blank">
+                <i class="fa fa-pinterest fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.tumblr_url != blank %}
+            <li>
+              <a href="{{ settings.tumblr_url }}" target="_blank">
+                <i class="fa fa-tumblr fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.youtube_url != blank %}
+            <li>
+              <a href="{{ settings.youtube_url }}" target="_blank">
+                <i class="fa fa-youtube fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.googleplus_url != blank %}
+            <li>
+              <a href="{{ settings.googleplus_url }}" target="_blank">
+                <i class="fa fa-google-plus-official fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.snapchat-id != blank %}
+            <li>
+              <a href="//snapchat.com/add/{{ settings.snapchat-id }}" target="_blank">
+                <i class="fa fa-snapchat-ghost fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.weibo-id != blank %}
+            <li>
+              <a href="//weibo.com/{{ settings.weibo-id }}" target="_blank">
+                <i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+        {% case section.blocks.size %}
+          {% when 0 %}
+          {% when 1 %}
+            {% assign column_width = 'desktop-12 tablet-6 mobile-3' %}
+          {% when 2 %}
+            {% assign column_width = 'desktop-6 tablet-3 mobile-3' %}
+          {% when 3 %}
+            {% assign column_width = 'desktop-4 tablet-3 mobile-3' %}
+          {% when 4 %}
+            {% assign column_width = 'desktop-3 tablet-3 mobile-3' %}
+        {% endcase %}
+        {% for block in section.blocks %}
+        {% case block.type %}
         {% when 'menu' %}
-          <div class="grid__item {{ column_width }}">
-            {% if block.settings.title %}
-              <h3 class="site-footer__section-title">{{ block.settings.title | escape }}</h3>
-            {% endif %}
-            <ul class="site-footer__menu">
-              {% for link in linklists[block.settings.menu].links %}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-
-        {% when 'text' %}
-          <div class="grid__item {{ column_width }}">
-            {% if block.settings.title %}
-              <h3 class="site-footer__section-title">{{ block.settings.title | escape }}</h3>
-            {% endif %}
-            <div class="rte">{{ block.settings.richtext }}</div>
-          </div>
-
-        {% when 'newsletter' %}
-          <div class="grid__item {{ column_width }}">
-            {% if block.settings.title %}
-              <h3 class="site-footer__section-title">{{ block.settings.title | escape }}</h3>
-            {% endif %}
-            <h3 class="site-footer__section-title">{{ 'general.newsletter_form.newsletter_heading' | t }}</h3>
-            {% include 'newsletter', label: block.settings.subtext %}
-          </div>
-
-      {% endcase %}
-    {% endfor %}
-
-    </div>
-
-  {% if section.blocks.size > 0 %}
-    <hr>
-  {% endif %}
-
-  <div class="grid medium-up--grid--table sub-footer small--text-center">
-    <div class="grid__item medium-up--one-half">
-      <small>{{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: '/' }}. {{ powered_by_link }}</small>
-    </div>
-    {%- if section.settings.show_payment_icons -%}
-      {%- unless shop.enabled_payment_types == empty -%}
-        <div class="grid__item medium-up--one-half medium-up--text-right">
-          <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
-          <ul class="list--inline payment-icons">
-            {%- for type in shop.enabled_payment_types -%}
-              <li>
-                {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
-              </li>
-            {%- endfor -%}
+        <div class="menu-item">
+          <h4>{{ block.settings.title }}</h4>
+          <ul {{ block.shopify_attributes }}>
+            {% for link in linklists[block.settings.footer_nav].links %}
+              <li>{{ link.title | link_to: link.url }}</li>
+            {% endfor %}
           </ul>
         </div>
-      {%- endunless -%}
-    {%- endif -%}
+        {% when 'newsletter' %}
+        <div class="{{ column_width }}">
+          <h4>{{ block.settings.title | escape }}</h4>
+          {{ block.settings.mailing_subheading }}
+          <div id="footer_signup">
+            <p>{{ settings.footer_signup_text | escape }}</p>
+              {% form 'customer' %}
+              {{ form.errors | default_errors }}
+              {% if form.posted_successfully? %}
+              <p class="success">{{ 'password.general.thanks' | t }}</p>
+              {% else %}
+              <input type="hidden" name="contact[tags]" value="prospect, password page">
+              <input type="email" name="contact[email]" id="footer-EMAIL" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}">
+              <input type="submit" id="footer-subscribe" value="{{ 'general.newsletter_form.submit' | t }}">
+              {% endif %}
+              {% endform %}
+          </div>
+        </div>
+        {% when 'text' %}
+        <div class="{{ column_width }}">
+          <h4>{{ block.settings.title | escape }}</h4>
+          <div class="rte">{{ block.settings.footer_text }}</div>
+        </div>
+        {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="clear"></div>
+      <div class="credit desktop-12 tablet-6 mobile-3">
+
+        <div id="payment">
+          {% if section.settings.show_credit_cards %}
+            {% for type in shop.enabled_payment_types %}
+              {{ type | payment_type_svg_tag: class:'payment-icon' }}
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <p>
+          {{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: "%Y" }} {{ shop.name | link_to: '/' }}
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
+<style>
+  #footer-wrapper {
+    text-align: {{ section.settings.footer_text_align }};
+  }
 
+  #footer-wrapper h4 {
+    text-transform: {{ section.settings.footer_title_transform }};
+    font-size: {{ section.settings.footer_title_size }}px;
+  }
+</style>
 
 {% schema %}
 {
-  "name": {
-    "de": "Fußzeile",
-    "en": "Footer",
-    "es": "Pie de página",
-    "fr": "Pied de page",
-    "it": "Footer",
-    "ja": "フッター",
-    "pt-BR": "Rodapé"
-  },
-  "max_blocks": 4,
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": {
-        "de": "Zahlungs-Buttons anzeigen",
-        "en": "Show payment icons",
-        "es": "Mostrar iconos de pago",
-        "fr": "Afficher les icônes de paiement",
-        "it": "Mostra le icone di pagamento",
-        "ja": "支払いアイコンを表示する",
-        "pt-BR": "Exibir ícones de pagamento"
-      },
-      "default": true
-    }
-  ],
-  "blocks": [
-    {
-      "type": "menu",
-      "name": {
-        "de": "Menü",
-        "en": "Menu",
-        "es": "Menú",
-        "fr": "Menu",
-        "it": "Menu",
-        "ja": "メニュー",
-        "pt-BR": "Menu"
-      },
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": {
-            "de": "Titel",
-            "en": "Heading",
-            "es": "Título",
-            "fr": "Titre",
-            "it": "Heading",
-            "ja": "見出し",
-            "pt-BR": "Título"
+    "name": "Footer",
+	"max_blocks": 4,
+    "settings": [
+     {
+        "type": "select",
+        "id": "footer_text_align",
+        "label": "Footer text align",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
           },
-          "default": {
-            "de": "Links",
-            "en": "Links",
-            "es": "Enlaces",
-            "fr": "Liens",
-            "it": "Links",
-            "ja": "リンク",
-            "pt-BR": "Links"
-          }
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "label": {
-            "de": "Menü",
-            "en": "Menu",
-            "es": "Menú",
-            "fr": "Menu",
-            "it": "Menu",
-            "ja": "メニュー",
-            "pt-BR": "Menu"
+          {
+            "value": "center",
+            "label": "Center"
           },
-          "info": {
-            "de": "Dieses Menü zeigt keine Dropdowns an",
-            "en": "This menu won't show dropdown items",
-            "es": "Este menú no mostrará elementos desplegables",
-            "fr": "Ce menu n'affichera pas les éléments des menus déroulants",
-            "it": "Questo menu non mostrerà elementi a discesa",
-            "ja": "このメニューにはドロップダウンアイテムは表示されません",
-            "pt-BR": "Este menu não mostra itens suspensos"
+          {
+            "value": "right",
+            "label": "Right"
           }
-        }
-      ]
-    },
+        ]
+      },
+      {
+        "type": "select",
+        "id": "footer_title_weight",
+        "label": "Footer title weight",
+        "options": [
+          {
+            "value": "300",
+            "label": "Light"
+          },
+          {
+            "value": "500",
+            "label": "Normal"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "footer_title_transform",
+        "label": "Footer title case",
+        "options": [
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "inherit",
+            "label": "regular"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "footer_title_size",
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px",
+        "label": "Footer title size",
+        "default": 14
+      },
+      {
+        "type": "checkbox",
+        "id": "show_credit_cards",
+        "label": "Show credit card icons",
+        "default": true,
+        "info": "The icons that show are determined by your store's payment settings."
+      }
+    ],
+   "blocks":[
+      {
+         "type":"menu",
+         "name":"Menu",
+         "settings":[
+            {
+               "type": "link_list",
+               "id": "footer_nav",
+               "label": "Sidebar menu",
+               "info": "This menu won't show dropdown items"
+            },
+           {
+            "type": "text",
+            "id": "title",
+            "label": "Menu title",
+            "default": "Explore"
+           }
+         ]
+      },
     {
       "type": "text",
-      "name": {
-        "de": "Text",
-        "en": "Text",
-        "es": "Texto",
-        "fr": "Texte",
-        "it": "Testo",
-        "ja": "テキスト",
-        "pt-BR": "Texto"
-      },
-      "settings": [
+      "name": "Text",
+      "settings":[
         {
           "type": "text",
           "id": "title",
-          "label": {
-            "de": "Titel",
-            "en": "Heading",
-            "es": "Título",
-            "fr": "Titre",
-            "it": "Heading",
-            "ja": "見出し",
-            "pt-BR": "Título"
-          },
-          "default": {
-            "de": "Kontaktieren Sie uns",
-            "en": "Contact us",
-            "es": "Ponte en contacto con nosotros",
-            "fr": "Contactez-nous",
-            "it": "Contattaci",
-            "ja": "お問い合わせ",
-            "pt-BR": "Fale conosco"
-          }
+          "label": "Text title",
+          "default": "About"
         },
-        {
+      {
+          "id": "footer_text",
           "type": "richtext",
-          "id": "richtext",
-          "label": {
-            "de": "Text",
-            "en": "Text",
-            "es": "Texto",
-            "fr": "Texte",
-            "it": "Testo",
-            "ja": "テキスト",
-            "pt-BR": "Texto"
-          },
-          "default": {
-            "de": "<p>Mit diesem Text können Sie Ihre Kunden über Ihre Marke informieren.</p>",
-            "en": "<p>Use this text to share information about your brand with your customers.</p>",
-            "es": "<p>Usa este texto para compartir información sobre tu marca con tus clientes.</p>",
-            "fr": "<p>Utilisez ce texte pour partager des informations sur votre marque avec vos clients.</p>",
-            "it": "<p>Utilizza questo spazio per condividere informazioni sul tuo brand con i clienti.</p>",
-            "ja": "<p>このテキストを使用して、あなたのブランドに関する情報をお客様と共有します。</p>",
-            "pt-BR": "<p>Use este texto para compartilhar informações sobre sua marca com seus clientes.</p>"
-          }
-        }
+          "label": "Text",
+          "default": "<p>Adding text to your footer helps introduce your business to new customers.</p>"
+       }
       ]
     },
     {
       "type": "newsletter",
-      "name": {
-        "de": "Newsletter-Anmeldung",
-        "en": "Newsletter signup",
-        "es": "Suscripción al boletín",
-        "fr": "Inscription",
-        "it": "Iscrizione newsletter",
-        "ja": "メールマガジンの登録",
-        "pt-BR": "Assinatura da newsletter"
-      },
+      "name": "Newsletter signup",
       "limit": 1,
-      "settings": [
+	    "settings":[
         {
-          "type": "richtext",
-          "id": "subtext",
-          "label": {
-            "de": "Subtext",
-            "en": "Subtext",
-            "es": "Subtexto",
-            "fr": "Sous-texte",
-            "it": "Sottotesto",
-            "ja": "サブテキスト",
-            "pt-BR": "Subtexto"
-          },
-          "default": {
-            "de": "<p>Werbeaktionen, neue Produkte und Sonderangebote. Direkt in Ihrem Posteingang.</p>",
-            "en": "<p>Promotions, new products and sales. Directly to your inbox.</p>",
-            "es": "<p>Promociones, nuevos productos y ofertas. Directamente a tu bandeja de entrada.</p>",
-            "fr": "<p>Promotions, nouveaux produits et soldes. Directement dans votre boîte de réception.</p>",
-            "it": "<p>Promozioni, nuovi prodotti e offerte. Direttamente nella tua inbox.</p>",
-            "ja": "<p>プロモーション、新商品、セールについて、あなたの受信箱に直接知らせる。</p>",
-            "pt-BR": "<p>Promoções, novos produtos e vendas. Diretamente para sua caixa de entrada.</p>"
-          }
+          "type": "text",
+          "id": "title",
+          "label": "Mailing list section title",
+          "default": "connect"
         },
         {
-          "type": "paragraph",
-          "content": {
-            "de": "Alle Kunden, die sich eintragen, bekommen ein Konto in Shopify. [Kunden ansehen](/admin/customers?query=&accepts_marketing=1)",
-            "en": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
-            "es": "Todos los clientes que se registren tendrán una cuenta creada para ellos en Shopify. [Ver clientes](/admin/customers?query=&accepts_marketing=1)",
-            "fr": "Les clients qui s'inscrivent auront un compte créé pour eux sur Shopify. [Afficher les clients](/admin/customers?query=&accepts_marketing=1)",
-            "it": "Qualsiasi cliente che si iscrive avrà un account creato appositamente su Shopify. [Visualizza clienti](/admin/customers?query=&accepts_marketing=1)",
-            "ja": "サインアップしたお客様は、Shopifyでアカウントが作成されます。[お客様を表示](/admin/customers?query=&accepts_marketing=1)",
-            "pt-BR": "Todos os clientes que se inscreverem terão uma conta criada para eles na Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)"
-          }
+         "type": "richtext",
+         "id": "mailing_subheading",
+         "label": "Mailing list subheading",
+         "default": "<p>Join our mailing list for updates</p>"
         }
-      ]
-    }
-  ]
-}
+	    ]
+	  }
+   ]
+  }
 {% endschema %}

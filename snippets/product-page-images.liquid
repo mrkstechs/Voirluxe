@@ -1,0 +1,20 @@
+<div class="product-page-images">
+    {% for image in product.images %}
+        <img src="{{ image.src | product_img_url: 'master' }}">
+    {% endfor %}
+</div>
+<div class="img-nav">
+    {{ product.images.size }}
+</div>
+<style>
+    .product-page-images{
+        display: grid;
+        grid-template-columns: 100% 100%;
+        width: 100%;
+        overflow: auto;
+    }
+    .product-page-images img{
+        display: block;
+        width: 100%;
+    }
+</style>

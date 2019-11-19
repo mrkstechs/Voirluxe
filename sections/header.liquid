@@ -1,341 +1,300 @@
-{% if section.settings.show_announcement and section.settings.home_page_only == false or template.name == 'index' %}
-  <style>
-    .announcement-bar--link:hover {
-      {% assign brightness = settings.color_primary_color | color_brightness %}
+<header class="mastheader" data-section-id="{{ section.id }}">
+  <div class="menu-btn shifter-handle">
+    {% include 'icon-hamburger' %}
+  </div>
+  <div class="site-logo">
+    {% if section.settings.logo != blank %}
+      <a href="/">
+        <img src="{{ section.settings.logo | img_url: 'master' }}" itemprop="logo">
+      </a>
+    {% else %}
+      <a href="/">
+        {{ shop.name }}
+      </a>
+    {% endif %}
+  </div>
+  <ul class="cart">
+    <li>
+      <a href="/cart" class="site-header__cart-toggle js-drawer-open-right" aria-controls="CartDrawer" aria-expanded="false">
+        <span class="cart-words">{{ 'cart.general.title' | t }}</span>
+        &nbsp;{% if section.settings.cart_icon == 'cart' %}<i class="fa fa-shopping-cart" aria-hidden="true"></i>{% elsif section.settings.cart_icon == 'bag' %}<i class="fa fa-shopping-bag" aria-hidden="true"></i>{% endif %}
+        <span class="CartCount">{{ cart.item_count }}</span>
+      </a>
+    </li>
+  </ul>
+</header>
 
-      {% if brightness <= 224 %}
-        background-color: {{ settings.color_primary_color | color_lighten: 4 }};
-      {% else %}
-        background-color: {{ settings.color_primary_color | color_darken: 8 }};
-      {% endif %}
-    }
-  </style>
-
-  {% if section.settings.announcement_link == blank %}
-    <div class="announcement-bar">
-  {% else %}
-    <a href="{{ section.settings.announcement_link }}" class="announcement-bar announcement-bar--link">
-  {% endif %}
-
-    <p class="announcement-bar__message site-wrapper">{{ section.settings.announcement_text | escape }}</p>
-
-  {% if section.settings.announcement_link == blank %}
+{% if template contains 'collection' %}
+  {% if collection.description contains '[banner]' %}
+    {% capture banner %}{{ collection.handle }}.jpg{% endcapture %}
+    <div class="collection-banner">
+      {% include 'collection-banner-image' %}
     </div>
-  {% else %}
-    </a>
   {% endif %}
-{% else %}
-  <div class="page-border"></div>
 {% endif %}
 
-{% unless section.settings.logo == blank %}
-  {%- assign logo_max_height = section.settings.logo_max_width | divided_by: section.settings.logo.aspect_ratio -%}
-  {% if logo_max_height > 600 %}
-    {%- assign logo_max_width = 600 | times: section.settings.logo.aspect_ratio -%}
-  {% else %}
-    {%- assign logo_max_width = section.settings.logo_max_width -%}
+<style>
+  {% if section.settings.logo != blank %}
+    @media screen and ( min-width: 740px ) {
+      #logo img { max-width: {{ section.settings.logo_max_width }}px; }
+    }
+  {% endif %}
+  {% if section.settings.header_cover and template == 'index' %}
+    @media screen and ( min-width: 981px ) {
+      .scrollheader { position: fixed; }
+    }
+  {% endif %}
+  {% if section.settings.header_border %}
+    header { border-bottom: 1px solid {{ settings.dotted_color }}; }
+  {% endif %}
+  {% if section.settings.logo_align == 'center' %}
+    #logo { text-align: center !important; }
+    #logo a { float: none; }
+  {% endif %}
+  {% unless section.settings.logo_align == 'center' %}
+    #logo { margin-right: 20px; }
+  {% endunless  %}
+
+  {% unless section.settings.cart_position == 'announcement-bar' %}
+    .topbar { text-align: center !important; }
+  {% endunless %}
+  {% if section.settings.logo_align == 'left' and section.settings.nav_style == 'mobile' %}
+    .shifter-handle { margin-left: 20px; }
   {% endif %}
 
-  <style>
-    .site-header__logo {
-      width: {{ logo_max_width | escape | default: '150' | remove: 'px' | append: 'px'}};
-    }
-    #HeaderLogoWrapper {
-      max-width: {{ logo_max_width | escape | default: '150' | remove: 'px' | append: 'px'}} !important;
-    }
-  </style>
-{% endunless %}
-
-<div class="site-wrapper">
-  <div class="top-bar grid">
-
-    <div class="grid__item medium-up--one-fifth small--one-half">
-      <div class="top-bar__search">
-        <a href="/search" class="medium-up--hide">
-          {% include 'icon-search' %}
-        </a>
-        <form action="/search" method="get" class="search-bar small--hide" role="search">
-          {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
-          <button type="submit" class="search-bar__submit">
-            {% include 'icon-search' %}
-            <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
-          </button>
-          <input type="search" name="q" class="search-bar__input" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}">
-        </form>
-      </div>
-    </div>
-
-    {% if shop.customer_accounts_enabled %}
-      <div class="grid__item medium-up--two-fifths small--hide">
-        <span class="customer-links small--hide">
-          {% if customer %}
-            {% if customer.first_name != blank %}
-              {% capture first_name %}<a href="/account">{{ customer.first_name }}</a>{% endcapture %}
-              {{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}
-            {% else %}
-              <a href="/account">{{ 'layout.customer.account' | t }}</a>
-            {% endif %}
-            <span class="vertical-divider"></span>
-            {{ 'layout.customer.log_out' | t | customer_logout_link }}
-          {% else %}
-            {{ 'layout.customer.log_in' | t | customer_login_link }}
-            <span class="vertical-divider"></span>
-            {{ 'layout.customer.create_account' | t | customer_register_link }}
-          {% endif %}
-        </span>
-      </div>
-    {% endif %}
-
-    <div class="grid__item {% if shop.customer_accounts_enabled %} medium-up--two-fifths {% else %} medium-up--four-fifths {% endif %} small--one-half text-right">
-      <a href="/cart" class="site-header__cart">
-        {% include 'icon-cart' %}
-        <span class="small--hide">
-          {{ 'layout.cart.title' | t }}
-          (<span id="CartCount">{{ cart.item_count }}</span>)
-        </span>
-      </a>
-      <span class="vertical-divider small--hide"></span>
-      <a href="/cart" class="site-header__cart small--hide">
-        {{ 'cart.general.checkout' | t }}
-      </a>
-    </div>
-  </div>
-
-  <hr class="small--hide hr--border">
-
-  <header class="site-header grid medium-up--grid--table" role="banner">
-    <div class="grid__item small--text-center">
-      <div itemscope itemtype="http://schema.org/Organization">
-        {% comment %}
-          Use the uploaded logo from theme settings if enabled.
-          Site name uses `h1` tag on homepage, div on other pages.
-        {% endcomment %}
-        {%- assign img_url = section.settings.logo | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-        {% assign width = section.settings.logo_max_width | times: 1 %}
-        {% include 'image-style' with image: section.settings.logo, width: width, height: 600, small_style: false, wrapper_id: 'HeaderLogoWrapper', img_id: 'HeaderLogo' %}
-
-        {% if section.settings.logo %}
-          <div id="HeaderLogoWrapper" class="supports-js">
-            <a href="/" itemprop="url" style="padding-top:{{ 1 | divided_by: section.settings.logo.aspect_ratio | times: 100}}%; display: block;">
-              <img id="HeaderLogo"
-                   class="lazyload"
-                   src="{{ section.settings.logo | img_url: '150x150' }}"
-                   data-src="{{ img_url }}"
-                   data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
-                   data-aspectratio="{{ product.featured_image.aspect_ratio }}"
-                   data-sizes="auto"
-                   alt="{{ section.settings.logo.alt | default: shop.name }}"
-                   itemprop="logo">
-            </a>
-          </div>
-          <noscript>
-            {% capture image_size %}{{ section.settings.logo_max_width | escape }}x{% endcapture %}
-            <a href="/" itemprop="url">
-              <img class="site-header__logo" src="{{ section.settings.logo | img_url: image_size }}"
-              srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
-              alt="{{ section.settings.logo.alt | default: shop.name }}"
-              itemprop="logo">
-            </a>
-          </noscript>
-          {% if template.name == 'index' %}
-            <h1 class="visually-hidden">{{ shop.name }}</h1>
-          {% endif %}
-        {% else %}
-          {% if template.name == 'index' %}
-            <h1 class="site-header__site-name">
-              <a href="/" itemprop="url">{{ shop.name }}</a>
-            </h1>
-          {% else %}
-            <a href="/" class="site-header__site-name h1" itemprop="url">
-              {{ shop.name }}
-            </a>
-            {% if template.name == 'index' %}
-              <h1 class="visually-hidden">{{ shop.name }}</h1>
-            {% endif %}
-          {% endif %}
-        {% endif %}
-      </div>
-    </div>
-    {% unless section.settings.tagline == blank %}
-      <div class="grid__item medium-up--text-right small--text-center">
-        <div class="rte tagline">
-          {{ section.settings.tagline }}
-        </div>
-      </div>
-    {% endunless %}
-  </header>
-</div>
-
-
+  .topbar {
+    font-size: {{ section.settings.announcement_text_size }}px;
+  }
+  .topbar,
+  .topbar a {
+    color: {{ settings.announcement_bar_text_color }};
+  }
+  .topbar ul#cart li a {
+    font-size: {{ section.settings.announcement_text_size }}px;
+  }
+  .topbar select.currency-picker {
+    font-size: {{ section.settings.announcement_text_size }}px;
+  }
+  #logo a {
+    font-size: {% if settings.use_logo_image %}inherit{% else %}{{ section.settings.logo_size }}px{% endif %};
+    text-transform: {{ section.settings.logo_transform }};
+    font-weight: {{ section.settings.logo_weight }};
+  }
+</style>
 
 {% schema %}
-{
-  "name": {
-    "de": "Titel",
-    "en": "Header",
-    "es": "Encabezado",
-    "fr": "En-tête",
-    "it": "Header",
-    "ja": "ヘッダー",
-    "pt-BR": "Cabeçalho"
-  },
-  "settings": [
-    {
-      "type": "header",
-      "content": {
-        "de": "Logo",
-        "en": "Logo",
-        "es": "Logotipo",
-        "fr": "Logo",
-        "it": "Logo",
-        "ja": "ロゴ",
-        "pt-BR": "Logotipo"
-      }
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": {
-        "de": "Logo-Foto",
-        "en": "Logo image",
-        "es": "Imagen del logotipo",
-        "fr": "Image du logo",
-        "it": "Immagine del logo",
-        "ja": "ロゴ画像",
-        "pt-BR": "Imagem do logotipo"
-      }
-    },
-    {
-      "type": "text",
-      "id": "logo_max_width",
-      "label": {
-        "de": "Benutzerdefinierte Logobreite (Pixel)",
-        "en": "Custom logo width (in pixels)",
-        "es": "Ancho del logotipo personalizado (en píxeles)",
-        "fr": "Largeur personnalisée du logo (en pixels)",
-        "it": "Larghezza logo personalizzato (in pixel)",
-        "ja": "ロゴの幅をカスタムする（ピクセルで）",
-        "pt-BR": "Largura do logotipo personalizado (em pixels)"
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "full_width_header",
+        "label": "Full width header"
       },
-      "default": {
-        "de": "150",
-        "en": "150",
-        "es": "150",
-        "fr": "150",
-        "it": "150",
-        "ja": "150",
-        "pt-BR": "150"
-      }
-    },
-    {
-      "type": "header",
-      "content": {
-        "de": "Ankündigungsleiste",
-        "en": "Announcement bar",
-        "es": "Barra de anuncios",
-        "fr": "Barre d'annonces",
-        "it": "Barra degli annunci",
-        "ja": "告知バー",
-        "pt-BR": "Barra de anúncio"
-      }
-    },
-    {
-      "type": "checkbox",
-      "id": "show_announcement",
-      "label": {
-        "de": "Ankündigung anzeigen",
-        "en": "Show announcement",
-        "es": "Mostrar anuncio",
-        "fr": "Afficher l'annonce",
-        "it": "Mostra annuncio",
-        "ja": "告知を表示する",
-        "pt-BR": "Exibir anúncio"
+      {
+        "type": "checkbox",
+        "id": "header_cover",
+        "label": "Float header over slideshow"
       },
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "home_page_only",
-      "label": {
-        "de": "Nur Startseite",
-        "en": "Home page only",
-        "es": "Solo página de inicio",
-        "fr": "Page d'accueil uniquement",
-        "it": "Solo home page",
-        "ja": "ホームページのみ",
-        "pt-BR": "Apenas página inicial"
+      {
+        "type": "checkbox",
+        "id": "header_border",
+        "label": "Add bottom border"
       },
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "announcement_text",
-      "label": {
-        "de": "Ankündigungstext",
-        "en": "Announcement text",
-        "es": "Texto del anuncio",
-        "fr": "Texte d'annonce",
-        "it": "Testo annuncio",
-        "ja": "告知テキスト",
-        "pt-BR": "Texto do anúncio"
+      {
+        "type": "header",
+        "content": "Announcement Bar"
       },
-      "default": {
-        "de": "Hier etwas ankündigen",
-        "en": "Announce something here",
-        "es": "Anuncia algo aquí",
-        "fr": "Annoncez quelque chose ici",
-        "it": "Annuncia qualcosa qui",
-        "ja": "ここで告知してください",
-        "pt-BR": "Anuncie algo aqui"
-      }
-    },
-    {
-      "type": "url",
-      "id": "announcement_link",
-      "label": {
-        "de": "Ankündigungslink",
-        "en": "Announcement link",
-        "es": "Enlace de anuncio",
-        "fr": "Lien d'annonce",
-        "it": "Link annuncio",
-        "ja": "告知リンク",
-        "pt-BR": "Link de anúncio"
+      {
+        "type": "checkbox",
+        "default": true,
+        "id": "show_announcement_text",
+        "label": "Show announcement text"
       },
-      "info": {
-        "de": "Optional",
-        "en": "Optional",
-        "es": "Opcional",
-        "fr": "Facultatif",
-        "it": "Facoltativo",
-        "ja": "選択させる",
-        "pt-BR": "Opcional"
+      {
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Announcement text",
+        "default": "Share a shop announcement or message"
+      },
+      {
+        "type": "range",
+        "id": "announcement_text_size",
+        "min": 12,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "label": "Announcement text size",
+        "default": 13
+      },
+      {
+        "type": "url",
+        "id": "announcement_link",
+        "label": "Announcement link"
+      },
+      {
+        "type": "header",
+        "content": "Cart Link"
+      },
+      {
+        "type": "select",
+        "id": "cart_position",
+        "label": "Cart link position",
+        "options": [
+          {
+            "value": "announcement-bar",
+            "label": "Announcement Bar"
+          },
+          {
+            "value": "header",
+            "label": "Header"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "cart_icon",
+        "label": "Cart link icon",
+        "options": [
+          {
+            "value": "cart",
+            "label": "Cart"
+          },
+            {
+            "value": "bag",
+            "label": "Bag"
+          }
+        ],
+        "info":"You can change the text in your edit language section"
+      },
+      {
+        "type": "header",
+        "content": "Header Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_max_width",
+        "min": 100,
+        "max": 250,
+        "step": 5,
+        "unit": "px",
+        "label": "Custom logo width",
+        "default": 200
+      },
+        {
+        "type": "select",
+        "id": "logo_align",
+        "label": "Logo position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "logo_size",
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px",
+        "label": "Logo text size",
+        "default": 22
+      },
+        {
+        "type": "select",
+        "id": "logo_transform",
+        "label": "Logo text case",
+        "options": [
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "none",
+            "label": "Normal"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "logo_weight",
+        "label": "Logo text weight",
+        "options": [
+          {
+            "value": "400",
+            "label": "Normal"
+          },
+          {
+            "value": "300",
+            "label": "Light"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
+        "type": "select",
+        "id": "nav_style",
+        "label": "Navigation style",
+        "options": [
+          {
+            "value": "full",
+            "label": "Full Horizontal"
+          },
+          {
+            "value": "mobile",
+            "label": "Slideout Vertical"
+          }
+        ],
+        "info":"Mega menu will only show if using the Full Horizontal style"
+      },
+      {
+        "type": "link_list",
+        "id": "main_nav",
+        "label": "Choose navigation menu",
+        "default":"main-menu"
       }
-    },
-    {
-      "type": "header",
-      "content": {
-        "de": "Tagline",
-        "en": "Tagline",
-        "es": "Eslogan",
-        "fr": "Slogan",
-        "it": "Tagline",
-        "ja": "タグライン",
-        "pt-BR": "Tagline"
+    ],
+    "blocks": [
+      {
+        "type": "mega_menu",
+        "name": "Mega menu",
+        "settings": [
+          {
+            "type":"text",
+            "id":"menu_item",
+            "label":"Menu item",
+            "info":"Enter menu item to apply a mega menu"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav_image",
+            "label": "Featured image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Slide link"
+          }
+        ]
       }
-    },
-    {
-      "type": "richtext",
-      "id": "tagline",
-      "label": {
-        "de": "Text",
-        "en": "Text",
-        "es": "Texto",
-        "fr": "Texte",
-        "it": "Testo",
-        "ja": "テキスト",
-        "pt-BR": "Texto"
-      }
-    }
-  ]
-}
+    ]
+  }
 {% endschema %}

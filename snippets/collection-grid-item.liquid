@@ -1,40 +1,18 @@
-{% if collection.image %}
-  {%- assign collection_image = collection.image -%}
-{% elsif collection.products.first and collection.products.first.images != empty %}
-  {%- assign collection_image = collection.products.first.featured_image -%}
-{% else %}
-  {% assign collection_image = blank %}
-{% endif %}
-
-<div class="collection-grid-item">
-  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link">
-    {% unless collection_image == blank %}
-      <div class="collection-grid-item__overlay lazyload"
-        data-bgset="{% include 'bgset', image: collection_image %}"
-        data-sizes="auto"
-        data-parent-fit="cover">
-      </div>
+<div class="collection-image ci">
+  <a href="{{ collection.url }}" title="{{ collection_title }}">
+    {% if collection.image %}
+      {% include "basic-responsive-image", type: collection.image %}
       <noscript>
-        <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+        <img src="{{ collection.image | img_url: '1024x1024' }}" alt="{{ collection__image.alt | escape }}" class="collection__image">
       </noscript>
     {% else %}
-      {% if collection == empty %}
-        <div class="collection-grid-item__overlay">
-          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
-          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
-        </div>
-      {% else %}
-         <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
-      {% endif %}
-    {% endunless %}
-    <div class="collection-grid-item__title-wrapper">
-      <h3 class="h2 collection-grid-item__title">
-        {% if collection.title == blank %}
-          {{ 'homepage.onboarding.collection_title' | t }}
-        {% else %}
-          {{ collection.title }}
-        {% endif %}
-      </h3>
-    </div>
+      {% include "basic-responsive-image", type: collection.products.first.featured_image %}
+      <noscript>
+        <img src="{{ collection.products.first.featured_image | img_url: '1024x1024' }}" alt="{{ collection.products.first.featured_image.alt | escape }}" class="collection__image">
+      </noscript>
+    {% endif %}
   </a>
+</div>
+<div class="product-details">
+  <h3><a href="{{ collection.url }}" title="{{ collection_title }}">{{ collection.title }}</a></h3>
 </div>

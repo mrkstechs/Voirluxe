@@ -1,0 +1,46 @@
+<section data-section-id="{{ section.id }}"  class="homepage-content">
+  {% if section.settings.home_nav != blank %}
+  	<ul class="homepage-nav">
+      {% for link in linklists[section.settings.home_nav].links %}
+      	<li>
+          <a href="{{ link.url }}">
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {% endfor %}
+  	</ul>
+  {% else %}
+  	<p>{{ section.settings.message }}</p>
+  {% endif %}
+  <p>{{ section.settings.message }}</p>
+</section>
+{% schema %}
+  {
+    "name": "Homepage Content",
+    "settings": [
+		{
+          "type": "link_list",
+          "id": "home_nav",
+          "label": "Choose main menu"
+        },
+		{
+		  "type": "text",
+          "id": "message",
+          "label": "Text",
+          "default": "Use #VOIRLUXE for a chance to get featured"
+		}
+	],
+	"presets":[
+      {
+       "name":"Homepage Content",
+       "category":"Text"
+	  }
+   ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
